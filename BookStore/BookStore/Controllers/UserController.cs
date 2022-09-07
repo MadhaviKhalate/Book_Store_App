@@ -42,5 +42,49 @@ namespace BookStore.Controllers
                     throw;
                 }
             }
+
+        [HttpPost]
+        [Route("Login")]
+        public IActionResult Login([FromBody] LoginModel loginModel)
+        {
+            try
+            {
+                var result = this.iUserBl.Login(loginModel);
+                if (result != null)
+                {
+                    return Ok(new { success = true, message = "Login Successfull" });
+                }
+                else
+                {
+                    return BadRequest(new { success = false, message = "Login UnSuceessfull" });
+                }
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpPost]
+        [Route("ForgetPassword")]
+        public IActionResult ForgetPassword([FromBody] string EmailId)
+        {
+            try
+            {
+                var result = this.iUserBl.ForgetPassword(EmailId);
+                if (result != null)
+                {
+                    return Ok(new { success = true, message = "Mail Sent Successful" });
+                }
+                else
+                {
+                    return BadRequest(new { success = false, message = "Mail UnSuceessfull" });
+                }
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
+        }
     }
 }

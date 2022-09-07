@@ -28,5 +28,31 @@ namespace Manager.Services
                     throw;
                 }
             }
+
+        public bool Login(LoginModel loginModel)
+        {
+            try
+            {
+                return iuserRL.UserLogin(loginModel);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public string ForgetPassword(string EmailId)
+        {
+            try
+            {
+                return iuserRL.ForgetPassword(EmailId);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }
