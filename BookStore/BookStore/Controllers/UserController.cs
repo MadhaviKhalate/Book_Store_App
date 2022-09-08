@@ -1,6 +1,8 @@
 ﻿using Manager.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model;
+using System.Security.Claims;
 
 namespace BookStore.Controllers
 {
@@ -79,6 +81,31 @@ namespace BookStore.Controllers
                 else
                 {
                     return BadRequest(new { success = false, message = "Mail UnSuceessfull" });
+                }
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("ResetPassword")]
+        public IActionResult ResetPassword(ResetModel resetModel)
+        {
+            try
+            {
+                var EmailId = User.FindFirst(ClaimTypes.Email).Value.ToString();
+                var result = this.iUserBl.ResetPassword(resetModel, EmailId);
+
+                if (result != null)
+                {
+                    return Ok(new { Success = true, Message = " Password reset succcessful" });
+                }
+                else
+                {
+                    return BadRequest(new { Success = false, Message = "Password reset unsuccessful" });
                 }
             }
             catch (System.Exception)

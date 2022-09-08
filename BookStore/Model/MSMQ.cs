@@ -48,7 +48,7 @@ namespace Model
 
             htmlBody = "Write some HTML code here";
 
-            mail.Body = "<body><p>Dear Lakshmi,<br><br>" +
+            mail.Body = "<body><p>Dear Madhavi,<br><br>" +
                 "We have sent you a link for resetting your password.<br>" +
                 "Please copy it and paste in your swagger authorization.</body>" + Token;
 

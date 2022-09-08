@@ -40,3 +40,32 @@ As
 Begin
 	Select * from Users where EmailId=@EmailId
 End;
+
+CREATE PROCEDURE ResetPassword
+	@EmailId varchar(100),
+	@Password varchar(100)
+AS
+BEGIN
+	UPDATE Users SET Password = @Password WHERE EmailId = @EmailId;
+END
+
+CREATE TABLE AdminTable
+(
+AdminId int identity primary key,
+AdminName varchar(Max) Not null,
+AdminEmailID varchar(Max) Not null,
+AdminPassword varchar(Max) Not null,
+AdminPhoneNo varchar(20) Not null,
+AdminAddress varchar(100) Not null
+);
+
+Go
+CREATE PROCEDURE [AdminLogin] @EmailId VARCHAR(100), @Password VARCHAR (100)
+AS
+BEGIN
+SELECT EmailId,Password FROM Users WHERE EmailId= @EmailId AND Password=@Password
+END
+
+SELECT * FROM AdminTable;
+
+INSERT INTO AdminTable values('Admin', 'Admin123@gmail.com','abcdef','9748656374','Maharashtra');
