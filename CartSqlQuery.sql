@@ -22,3 +22,28 @@ Begin
 	insert into CartTable(Book_Quantity,UserId,BookId)
 	values ( @BookQuantity,@UserId, @BookId);
 End;
+
+--------- Update BookQuantity in Cart --------
+
+create procedure UpdateCart
+(
+	@BookQuantity int,@BookId int,@UserId int,@CartId int
+)
+as
+begin
+update CartTable set BookId=@BookId,UserId=@UserId,Book_Quantity=@BookQuantity where CartId=@CartId;
+end
+
+-------------- For Remove Books From Cart ----------
+
+create procedure RemoveCart
+(
+@CartId int
+)
+as
+begin
+
+	delete from CartTable where CartId = @CartId;
+end;
+
+

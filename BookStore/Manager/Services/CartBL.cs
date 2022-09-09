@@ -27,5 +27,42 @@ namespace Manager.Services
                 throw;
             }
         }
+        public CartModel UpdateCart(int CartId, CartModel cart, int UserId)
+        {
+            try
+            {
+                return this.cartRL.UpdateCart(CartId, cart, UserId);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public string RemoveCart(int CartId)
+        {
+            try
+            {
+                return this.cartRL.RemoveCart(CartId);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public IEnumerable<CartPostModel> GetCart(int UserID)
+        {
+            try
+            {
+                return cartRL.GetCart(UserID);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

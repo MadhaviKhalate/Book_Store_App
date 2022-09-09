@@ -9,5 +9,10 @@ namespace Manager.Interface
     {
         public CartModel AddCart(CartModel cart, int UserId);
 
+        public CartModel UpdateCart(int CartId, CartModel cart, int UserId);
+
+        public string RemoveCart(int CartId);
+        public IEnumerable<CartPostModel> GetCart(int UserID);
+
     }
 }
