@@ -6,6 +6,7 @@ namespace Model
 {
     public class BookModel
     {
+        public int BookId { get; set; }
         public string BookName { get; set; }
         public string AuthorName { get; set; }
         public string Rating { get; set; }

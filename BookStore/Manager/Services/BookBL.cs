@@ -27,5 +27,57 @@ namespace Manager.Services
                 throw ex;
             }
         }
+
+        public BookModel UpdateBook(BookModel bookModel)
+        {
+            try
+            {
+                return this.ibookRL.UpdateBook(bookModel);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        public string DeleteBook(int BookId)
+        {
+            try
+            {
+                return this.ibookRL.DeleteBook(BookId);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        public List<BookModel> GetAllBooks()
+        {
+            try
+            {
+                return this.ibookRL.GetAllBooks();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        public BookModel GetBookById(int BookId)
+        {
+            try
+            {
+                return this.ibookRL.GetBookById(BookId);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
     }
 }

@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-//using System.Data.SqlClient;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -85,6 +84,7 @@ namespace Repository.Services
                         string query = "SELECT ID FROM Users WHERE EmaiLId = '" + result + "'";
                         SqlCommand cmd = new SqlCommand(query, sqlConnection);
                         var Id = cmd.ExecuteScalar();
+                        //var token = GenerateSecurityToken(loginModel.EmailId, Id.ToString());
                         return true;
                     }
                     else
@@ -112,6 +112,7 @@ namespace Repository.Services
             {
                 Subject = new ClaimsIdentity(new[]
                 {
+                    new Claim(ClaimTypes.Role,"Users"),
                     new Claim(ClaimTypes.Email, email),
                     new Claim("ID", userID.ToString())
                 }),
