@@ -38,5 +38,17 @@ namespace Manager.Services
                 throw new Exception();
             }
         }
+
+        public IEnumerable<GetOrderModel> GetAllOrders()
+        {
+            try
+            {
+                return orderRL.GetAllOrders();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

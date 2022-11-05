@@ -63,7 +63,7 @@ namespace Repository.Services
             }
         }
 
-        public BookModel UpdateBook(BookModel bookModel)
+        public BookModel UpdateBook(BookModel bookModel, int BookId)
         {
             sqlConnection = new SqlConnection(this.configuration.GetConnectionString("DBConnection"));
             using (sqlConnection)
@@ -74,7 +74,6 @@ namespace Repository.Services
                     SqlCommand cmd = new SqlCommand("UpdateBook", sqlConnection);
                     cmd.CommandType = CommandType.StoredProcedure;
                     sqlConnection.Open();
-                    cmd.Parameters.AddWithValue("@BookId ", bookModel.BookId);
                     cmd.Parameters.AddWithValue("@BookName ", bookModel.BookName);
                     cmd.Parameters.AddWithValue("@AuthorName", bookModel.AuthorName);
                     cmd.Parameters.AddWithValue("@Rating ", bookModel.Rating);
@@ -84,6 +83,8 @@ namespace Repository.Services
                     cmd.Parameters.AddWithValue("@Description ", bookModel.Description);
                     cmd.Parameters.AddWithValue("@BookImage", bookModel.BookImage);
                     cmd.Parameters.AddWithValue("@BookQuantity", bookModel.BookQuantity);
+                    cmd.Parameters.AddWithValue("@BookId ", BookId);
+
 
                     var result = cmd.ExecuteNonQuery();
 
@@ -146,9 +147,9 @@ namespace Repository.Services
             }
         }
 
-        public List<BookModel> GetAllBooks()
+        public List<GetBookModel> GetAllBooks()
         {
-            List<BookModel> books = new List<BookModel>();
+            List<GetBookModel> books = new List<GetBookModel>();
             sqlConnection = new SqlConnection(this.configuration.GetConnectionString("DBConnection"));
             using (sqlConnection)
             {
@@ -165,7 +166,7 @@ namespace Repository.Services
                     {
                         while (reader.Read())
                         {
-                            books.Add(new BookModel
+                            books.Add(new GetBookModel
                             {
                                 BookId = Convert.ToInt32(reader["BookId"]),
                                 BookName = reader["BookName"].ToString(),
@@ -174,6 +175,7 @@ namespace Repository.Services
                                 RatingCount = Convert.ToInt32(reader["RatingCount"]),
                                 DiscountPrice = reader["DiscountPrice"].ToString(),
                                 ActualPrice = reader["ActualPrice"].ToString(),
+                                Description = reader["Description"].ToString(),
                                 BookImage = reader["BookImage"].ToString(),
                                 BookQuantity = Convert.ToInt32(reader["BookQuantity"]),
                             });
@@ -199,7 +201,7 @@ namespace Repository.Services
             }
         }
 
-        public BookModel GetBookById(int BookId)
+        public GetBookModel GetBookById(int BookId)
         {
             sqlConnection = new SqlConnection(this.configuration.GetConnectionString("DBConnection"));
             using (sqlConnection)
@@ -218,10 +220,10 @@ namespace Repository.Services
 
                     if (reader.HasRows)
                     {
-                        BookModel model = new BookModel();
+                        GetBookModel model = new GetBookModel();
                         while (reader.Read())
                         {
-                            BookId = Convert.ToInt32(reader["BookId"]);
+                            model.BookId = Convert.ToInt32(reader["BookId"]);
                             model.BookName = reader["BookName"].ToString();
                             model.AuthorName = reader["AuthorName"].ToString();
                             model.Rating = reader["Rating"].ToString();

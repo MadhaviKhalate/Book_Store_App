@@ -28,11 +28,11 @@ namespace Manager.Services
             }
         }
 
-        public BookModel UpdateBook(BookModel bookModel)
+        public BookModel UpdateBook(BookModel bookModel, int BookId)
         {
             try
             {
-                return this.ibookRL.UpdateBook(bookModel);
+                return this.ibookRL.UpdateBook(bookModel, BookId);
             }
             catch (Exception ex)
             {
@@ -54,7 +54,7 @@ namespace Manager.Services
             }
         }
 
-        public List<BookModel> GetAllBooks()
+        public List<GetBookModel> GetAllBooks()
         {
             try
             {
@@ -67,7 +67,7 @@ namespace Manager.Services
             }
         }
 
-        public BookModel GetBookById(int BookId)
+        public GetBookModel GetBookById(int BookId)
         {
             try
             {

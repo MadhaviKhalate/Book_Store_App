@@ -46,3 +46,4 @@ AS
 BEGIN
 	DELETE FROM Orders WHERE OrderId=@OrderId
 END
+

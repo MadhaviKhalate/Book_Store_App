@@ -60,5 +60,28 @@ namespace BookStore.Controllers
                 throw;
             }
         }
+
+        [Authorize]
+        [HttpGet]
+        [Route("get")]
+        public IActionResult GetOrder()
+        {
+            try
+            {
+                var result = orderBL.GetAllOrders();
+                if (result != null)
+                {
+                    return Ok(new { success = true, message = "Orders got successfully.", data = result });
+                }
+                else
+                {
+                    return BadRequest(new { success = false, message = "Cannot get order." });
+                }
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
+        }
     }
 }

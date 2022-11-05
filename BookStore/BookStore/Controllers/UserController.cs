@@ -11,10 +11,7 @@ namespace BookStore.Controllers
 
     public class UserController : ControllerBase
     {
-        //public IActionResult Index()
-        //{
-        //   return View();
-        //}
+        
        
             private readonly IUserBL iUserBl;
 
@@ -46,19 +43,19 @@ namespace BookStore.Controllers
             }
 
         [HttpPost]
-        [Route("Login")]
-        public IActionResult Login([FromBody] LoginModel loginModel)
+        [Route("login")]
+        public IActionResult UserLogin(LoginModel loginModel)
         {
             try
             {
-                var result = this.iUserBl.Login(loginModel);
+                var result = iUserBl.UserLogin(loginModel);
                 if (result != null)
                 {
-                    return Ok(new { success = true, message = "Login Successfull" });
+                    return Ok(new { success = true, message = "Login Successful", data = result });
                 }
                 else
                 {
-                    return BadRequest(new { success = false, message = "Login UnSuceessfull" });
+                    return BadRequest(new { success = false, message = "Login Failed" });
                 }
             }
             catch (System.Exception)
@@ -66,10 +63,9 @@ namespace BookStore.Controllers
                 throw;
             }
         }
-
         [HttpPost]
-        [Route("ForgetPassword")]
-        public IActionResult ForgetPassword([FromBody] string EmailId)
+        [Route("ForgetPassword/{EmailId}")]
+        public IActionResult ForgetPassword(string EmailId)
         {
             try
             {

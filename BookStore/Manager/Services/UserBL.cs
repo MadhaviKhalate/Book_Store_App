@@ -29,7 +29,7 @@ namespace Manager.Services
                 }
             }
 
-        public bool Login(LoginModel loginModel)
+        public string UserLogin(LoginModel loginModel)
         {
             try
             {
@@ -42,11 +42,11 @@ namespace Manager.Services
             }
         }
 
-        public string ForgetPassword(string EmailId)
+        public string ForgetPassword(string Email)
         {
             try
             {
-                return iuserRL.ForgetPassword(EmailId);
+                return iuserRL.ForgetPassword(Email);
             }
             catch (Exception)
             {

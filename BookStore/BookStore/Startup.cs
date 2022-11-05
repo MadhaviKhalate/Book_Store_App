@@ -55,7 +55,7 @@ namespace BookStore
             services.AddSwaggerGen();
             services.AddSwaggerGen(opt =>
             {
-                opt.SwaggerDoc("v1", new OpenApiInfo { Title = "FundooNotes Web API", Version = "v1", Description = "This is Fundoo Notes Web API using 3 tier Architecture with Entity Framework - Code Frist Approach." });
+                opt.SwaggerDoc("v1", new OpenApiInfo { Title = "Book Store Web API", Version = "v1", Description = "This is Book Store Web API using 3 tier Architecture with Entity Framework - Database First Approach." });
                 opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     In = ParameterLocation.Header,
@@ -98,6 +98,15 @@ namespace BookStore
                 };
             });
 
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(
+                name: "AllowOrigin",
+                  builder => {
+                      builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                  });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -111,6 +120,8 @@ namespace BookStore
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("AllowOrigin");
 
             app.UseAuthentication();
 

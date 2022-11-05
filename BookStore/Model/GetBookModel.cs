@@ -4,8 +4,9 @@ using System.Text;
 
 namespace Model
 {
-    public class BookModel
+    public class GetBookModel
     {
+        public int BookId { get; set; }
         public string BookName { get; set; }
         public string AuthorName { get; set; }
         public string Rating { get; set; }

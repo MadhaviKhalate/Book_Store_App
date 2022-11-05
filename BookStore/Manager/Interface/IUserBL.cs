@@ -8,8 +8,8 @@ namespace Manager.Interface
     public interface IUserBL
     {
         public bool Registration(RegisterModel userRegistrationModel);
-        public bool Login(LoginModel loginModel);
-        public string ForgetPassword(string EmailId);
+        public string UserLogin(LoginModel loginModel);
+        public string ForgetPassword(string Email);
         public bool ResetPassword(ResetModel resetModel, string EmailId);
 
     }

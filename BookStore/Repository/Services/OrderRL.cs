@@ -17,6 +17,8 @@ namespace Repository.Services
         {
             this.configuration = configuration;
         }
+        SqlDataReader sqlDataReader;
+        List<GetOrderModel> order = new List<GetOrderModel>();
 
         public bool AddOrder(OrderModel order, int UserId)
         {
@@ -91,6 +93,41 @@ namespace Repository.Services
             {
                 sqlConnection.Close();
             }
+        }
+
+        public IEnumerable<GetOrderModel> GetAllOrders()
+        {
+            sqlConnection = new SqlConnection(this.configuration.GetConnectionString("DBConnection"));
+            using (sqlConnection)
+                try
+                {
+                    sqlConnection.Open();
+                    String query = "SELECT OrderId, OrderQty, AddressID, BookID, UserID, TotalPrice, OrderDate FROM Orders";
+                    SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
+                    sqlDataReader = sqlCommand.ExecuteReader();
+                    while (sqlDataReader.Read())
+                    {
+                        order.Add(new GetOrderModel()
+                        {
+                            OrderID = sqlDataReader["BookID"].ToString(),
+                            OrderQty = sqlDataReader["OrderQty"].ToString(),
+                            AddressID = sqlDataReader["AddressID"].ToString(),
+                            BookID = sqlDataReader["BookId"].ToString(),
+                            UserID = sqlDataReader["UserId"].ToString(),
+                            TotalPrice = sqlDataReader["TotalPrice"].ToString(),
+                            DateTime = sqlDataReader["OrderDate"].ToString()
+                        });
+                    }
+                    return order;
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+                finally
+                {
+                    sqlConnection.Close();
+                }
         }
     }
 }

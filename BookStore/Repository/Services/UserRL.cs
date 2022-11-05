@@ -30,6 +30,7 @@ namespace Repository.Services
             {
                 try
                 {
+                    var password = EncryptPassword(model.Password);
                     SqlCommand command = new SqlCommand("dbo.Add_User", sqlConnection);
                     command.CommandType = CommandType.StoredProcedure;
 
@@ -38,7 +39,7 @@ namespace Repository.Services
                     command.Parameters.AddWithValue("@FullName", model.FullName);
                     command.Parameters.AddWithValue("@EmailId", model.Email);
                     command.Parameters.AddWithValue("@MobileNumber", model.MobileNumber);
-                    command.Parameters.AddWithValue("@Password", model.Password);
+                    command.Parameters.AddWithValue("@Password", password);
 
 
                     var result = command.ExecuteNonQuery();
@@ -63,7 +64,7 @@ namespace Repository.Services
 
         }
 
-        public bool UserLogin(LoginModel loginModel)
+        public string UserLogin(LoginModel loginModel)
         {
             sqlConnection = new SqlConnection(this.Configuration.GetConnectionString("DBConnection"));
             using (sqlConnection)
@@ -72,24 +73,24 @@ namespace Repository.Services
                 {
                     SqlCommand command = new SqlCommand("Login_User", sqlConnection);
                     command.CommandType = CommandType.StoredProcedure;
-
+                    var password = EncryptPassword(loginModel.Password);
                     sqlConnection.Open();
 
                     command.Parameters.AddWithValue("@EmailId", loginModel.EmailId);
-                    command.Parameters.AddWithValue("@Password", loginModel.Password);
+                    command.Parameters.AddWithValue("@Password", password);
 
                     var result = command.ExecuteScalar();
                     if (result != null)
                     {
-                        string query = "SELECT ID FROM Users WHERE EmaiLId = '" + result + "'";
+                        string query = "SELECT ID FROM Users WHERE EmailId = '" + result + "'";
                         SqlCommand cmd = new SqlCommand(query, sqlConnection);
                         var Id = cmd.ExecuteScalar();
-                        //var token = GenerateSecurityToken(loginModel.EmailId, Id.ToString());
-                        return true;
+                        var token = GenerateSecurityToken(loginModel.EmailId, Id.ToString());
+                        return token;
                     }
                     else
                     {
-                        return false;
+                        return null;
                     }
                 }
                 catch (Exception e)
@@ -101,10 +102,9 @@ namespace Repository.Services
                     sqlConnection.Close();
                 }
             }
-
         }
 
-        public string GenerateSecurityToken(string email, long userID)
+        public string GenerateSecurityToken(string email, string userID)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(this.Configuration[("JWT:key")]));
@@ -169,8 +169,7 @@ namespace Repository.Services
                 throw ex;
             }
         }
-        public string ForgetPassword(string EmailId)
-
+        public string ForgetPassword(string Email)
         {
             sqlConnection = new SqlConnection(this.Configuration.GetConnectionString("DBConnection"));
             using (sqlConnection)
@@ -178,35 +177,31 @@ namespace Repository.Services
                 try
                 {
                     sqlConnection.Open();
-                    SqlCommand command = new SqlCommand("ForgetPassword", sqlConnection);
-                    command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.AddWithValue("@EmailId", EmailId);
-                    SqlDataReader sqlDataReader = command.ExecuteReader();
-                    if (sqlDataReader.HasRows)
+                    string query = "SELECT EmailId FROM Users WHERE EmailId = '" + Email + "'";
+                    SqlCommand cmd = new SqlCommand(query, sqlConnection);
+                    var email = cmd.ExecuteScalar();
+                    string query1 = "SELECT ID FROM Users WHERE EmailId = '" + Email + "'";
+                    SqlCommand sqlCommand = new SqlCommand(query1, sqlConnection);
+                    var id = sqlCommand.ExecuteScalar();
+                    if (email != null)
                     {
-                        while (sqlDataReader.Read())
-                        {
-                            var userId = Convert.ToInt32(sqlDataReader["ID"] == DBNull.Value ? default : sqlDataReader["ID"]);
-                            var token = GenerateSecurityToken(EmailId, userId);
-                            MSMQ msmqModel = new MSMQ();
-                            msmqModel.sendData2Queue(token);
-                            return token;
-                        }
+                        var token = GenerateSecurityToken(email.ToString(), id.ToString());
+                        MSMQ msmqModel = new MSMQ();
+                        msmqModel.sendData2Queue(token);
+                        return token;
                     }
                     else
-                    {
                         return null;
-                    }
+
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    throw new Exception(e.Message);
+                    throw;
                 }
                 finally
                 {
                     sqlConnection.Close();
                 }
-                return default;
             }
 
         }

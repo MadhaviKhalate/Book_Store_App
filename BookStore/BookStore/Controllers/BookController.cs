@@ -17,7 +17,8 @@ namespace BookStore.Controllers
             this.bookBL = bookBL;
         }
 
-        [Authorize(Roles = Role.Admin)]
+        //[Authorize(Roles = Role.Admin)]
+        [Authorize]
         [HttpPost("AddBook")]
         public ActionResult AddBook(BookModel bookModel)
         {
@@ -37,13 +38,13 @@ namespace BookStore.Controllers
             }
         }
 
-        [Authorize(Roles = Role.Admin)]
+        [Authorize]
         [HttpPut("UpdateBook")]
-        public ActionResult UpdateBook(BookModel bookModel)
+        public ActionResult UpdateBook(BookModel bookModel, int BookId)
         {
             try
             {
-                var book = this.bookBL.UpdateBook(bookModel);
+                var book = this.bookBL.UpdateBook(bookModel, BookId);
                 if (book != null)
                 {
                     return this.Ok(new { success = true, message = "Book updated successfully", data = book });
@@ -57,7 +58,7 @@ namespace BookStore.Controllers
             }
         }
 
-        [Authorize(Roles = Role.Admin)]
+        [Authorize]
         [HttpDelete("DeleteBook")]
         public ActionResult DeleteBook(int BookId)
         {
@@ -99,7 +100,7 @@ namespace BookStore.Controllers
             }
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpGet("GetBookById")]
         public ActionResult GetBookById(int BookId)
         {
